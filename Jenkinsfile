@@ -18,7 +18,7 @@ pipeline {
 
         // Azure Container Registry variables
         ACR_NAME = "mySampleACRDev"
-        ACR_PATH_URL = "https://mysampleacrdev.azurecr.io"
+        ACR_PATH_URL = "https://,.azurecr.io"
 
         // General Variables
         ENVIRONMENT = "dev"
@@ -37,7 +37,7 @@ pipeline {
         TF_CONTAINER_NAME = "$ENVIRONMENT-tf-blue-green"
         TF_VARIABLES_FILE_EXTENSION = ".tfvars"
         TF_VARIABLES_FILE = "rootVars-$ENVIRONMENT$TF_VARIABLES_FILE_EXTENSION"
-        TF_CODE_FOLDER = "infrastructure/tf_infrastructure"
+        TF_CODE_FOLDER = "blue_green_code/tf_aks_infrastructure"
     }
 
     stages {
@@ -83,9 +83,6 @@ pipeline {
                                 --file "$TF_FILE_NAME" \
                                 --connection-string "$AZ_STORAGE_CONNECTION_STRING_PSW"
                             '''
-
-                        sh 'rm -rf infrastructure'
-                        sh 'git clone https://github.com/guisesterheim/blue_green_code.git'
 
                         sh '''
                             cd $TF_CODE_FOLDER
@@ -155,9 +152,9 @@ pipeline {
                 sh '''
                     PROFILE=$ENVIRONMENT
 
-                    sed -i "s/$SERVICE:latest/$SERVICE:tmp/g" "infrastructure/kubernetes_deployment/k8s_deployment-$ENVIRONMENT.yaml"
-
-                    kubectl apply -f infrastructure/kubernetes_deployment/k8s_deployment-$ENVIRONMENT.yaml
+                    kubectl apply -f blue_green_code/kube_config/namespaces.yaml
+                    kubectl apply -f blue_green_code/kube_config/sampleJavaSpringService.yaml
+                    kubectl apply -f blue_green_code/kube_config/ingress.yaml
                     kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.34.1/deploy/static/provider/cloud/deploy.yaml
                 '''
 
