@@ -85,7 +85,7 @@ pipeline {
                             '''
 
                         sh 'rm -rf infrastructure'
-                        sh 'git clone https://esales.jenkins:$GIT_ACCESS_TOKEN_PSW@gitlab.com/e.sales/supplychain/logistics/infrastructure.git'
+                        sh 'git clone https://github.com/guisesterheim/blue_green_code.git'
 
                         sh '''
                             cd $TF_CODE_FOLDER
@@ -212,7 +212,7 @@ pipeline {
         stage('Turn Green'){
             steps{
                 sh 'rm -rf jenkins-helper'
-                sh 'git clone -n https://esales.jenkins:$GIT_ACCESS_TOKEN_PSW@gitlab.com/e.sales/supplychain/logistics/jenkins-helper.git --depth 1'
+                sh 'git clone -n https://github.com/guisesterheim/jenkins_helper.git'
                 
                 sh '''
                     cd jenkins-helper
