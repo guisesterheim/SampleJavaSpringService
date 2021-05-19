@@ -237,7 +237,8 @@ pipeline {
         }
         stage('Promote temp to latest & Destroy old'){
             steps {
-                build job: 'Platform/Infrastructure/DEV/Shutdown-App', wait: false, parameters: [string(name: 'DESTROY_ALL_BUT_THIS', value: env.TF_FILE_NAME)]
+                // Here you call another job on Jenkins to destroy you old environment
+                // build job: 'Platform/Infrastructure/DEV/Shutdown-App', wait: false, parameters: [string(name: 'DESTROY_ALL_BUT_THIS', value: env.TF_FILE_NAME)]
                 
                 script {
                     docker.withRegistry(env.ACR_PATH_URL){
@@ -251,12 +252,12 @@ pipeline {
     post {
         unsuccessful {
             // TODO: Notify slack
-            echo 'Notificar Slack'
-            echo 'Notificar métricas'
+            echo 'Notify Slack'
+            echo 'Add metrics'
         }
         success {
-            echo 'Notificar Slack'
-            echo 'Notificar métricas'
+            echo 'Notify Slack'
+            echo 'Add metrics'
         }
     }
 }
