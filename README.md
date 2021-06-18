@@ -11,3 +11,5 @@ This is a sample of microsservice using Java and Springboot. Find more informati
 ## Swagger / API Documentation
 
 Every time you start the project, a swagger will be available at <code>http://localhost:8080/swagger-ui.html</code>
+
+Teste de comentário durante a aula
